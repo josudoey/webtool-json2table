@@ -1,0 +1,24 @@
+.d-inline-block.small.p-0.m-0.w-100
+  .p-0.pb-1.m-0(v-if="isNull(value)")
+  .p-0.pb-1.m-0(v-else-if="isScalarType(value)") {{value}}
+  table.table.table-bordered.m-0(v-else-if="Array.isArray(value)")
+    tbody
+      tr
+        th.p-0.m-0(v-for="name in getColumns(value)")
+          template(v-if="name===ScalarType")
+          template(v-else-if="getColumnName(name)!==null") {{getColumnName(name)}}
+      tr(v-for="item,index in value")
+        td.p-0.m-0(v-for="key in getColumns(value)")
+          template(v-if="isNull(item)")
+          template(v-else-if="key===ScalarType&&isScalarType(item)") {{item}}
+          template(v-else-if="getColumnName(key)!==null")
+            json-table(:value="item[getColumnName(key)]")
+          template(v-else-if="Array.isArray(key)&&key[0]===index")
+            json-table(:value="item")
+  table.table.table.table-bordered.m-0(v-else-if="typeof(value)==='object'")
+    template(v-if="Object.keys(value).length>0")
+      tbody
+        tr(v-for="v,key in value") 
+          th.p-0.m-0 {{key}}
+          td.p-0.m-0
+            json-table(:value="v")

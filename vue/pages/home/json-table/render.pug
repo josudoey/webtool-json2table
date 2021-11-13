@@ -2,11 +2,12 @@
   .p-0.pb-1.m-0(v-if="isNull(value)")
   .p-0.pb-1.m-0(v-else-if="isScalarType(value)") {{value}}
   table.table.table-bordered.m-0(v-else-if="Array.isArray(value)")
-    tbody
+    thead
       tr
         th.p-0.m-0(v-for="name in getColumns(value)")
           template(v-if="name===ScalarType")
           template(v-else-if="getColumnName(name)!==null") {{getColumnName(name)}}
+    tbody
       tr(v-for="item,index in value")
         td.p-0.m-0(v-for="key in getColumns(value)")
           template(v-if="isNull(item)")

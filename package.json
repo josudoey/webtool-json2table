@@ -4,9 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "cd webpack&&webpack serve --port 3000 --config ./config.dev.js",
-    "build": "NODE_ENV=production webpack --config webpack/config.js",
     "audit": "npm audit fix",
+    "ncu": "npx npm-check-updates",
+    "webpack": "webpack",
+    "clean": "test -d dist&&rm -r dist||true",
+    "dev": "npm run clean;webpack serve --config webpack/config.dev.js --port 8080",
+    "build": "NODE_ENV=production webpack --config webpack/config.js",
     "deploy": "gh-pages -d dist"
   },
   "repository": {

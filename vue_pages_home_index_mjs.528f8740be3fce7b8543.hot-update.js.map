@@ -1,1 +1,0 @@
-{"version":3,"file":"vue_pages_home_index_mjs.528f8740be3fce7b8543.hot-update.js","mappings":";;;;;;;;;;;;;;AAAA;AACA","sources":["webpack:///../vue/pages/home/json-table/render.pug"],"sourcesContent":["var render = function () {}\nvar staticRenderFns = []\n\nexport { render, staticRenderFns }"],"names":[],"sourceRoot":""}

@@ -16,7 +16,12 @@ module.exports = {
     }
   },
   output: {
-    clean: true,
+    clean: {
+      keep (asset) {
+        // console.log(asset)
+        return asset.includes('ignored/dir')
+      }
+    },
     path: webpackOutputPath,
     publicPath: publicPath,
     filename: '[contenthash].js',
@@ -63,12 +68,13 @@ module.exports = {
       test: /\.(png|jpe?g|gif|svg)$/,
       type: 'asset/resource',
       generator: {
-        filename: 'img/[contenthash][ext]'
+        filename: './img/[contenthash][ext]'
       }
     }, {
       test: /\.(woff2?|eot|ttf|otf)$/,
+      type: 'asset/resource',
       generator: {
-        filename: 'fonts/[contenthash][ext]'
+        filename: './font/[contenthash][ext]'
       }
     }, {
       test: /\.html$/,
@@ -86,10 +92,7 @@ module.exports = {
           }
         }
       }, {
-        loader: require.resolve('pug-html-loader'),
-        options: {
-          doctype: 'html'
-        }
+        loader: require.resolve('pug-plain-loader')
       }]
     }, {
       test: /template.pug$/,
@@ -101,16 +104,14 @@ module.exports = {
           }
         }
       }, {
-        loader: require.resolve('pug-html-loader'),
-        options: {
-          doctype: 'html'
-        }
+        loader: require.resolve('pug-plain-loader')
       }]
     }, {
       test: /module\.css$/,
       use: [{
         loader: MiniCssExtractPlugin.loader,
         options: {
+          publicPath: '../'
         }
       }, {
         loader: require.resolve('css-loader'),
@@ -128,6 +129,7 @@ module.exports = {
       use: [{
         loader: MiniCssExtractPlugin.loader,
         options: {
+          publicPath: '../'
         }
       }, {
         loader: require.resolve('css-loader'),
@@ -135,6 +137,30 @@ module.exports = {
           importLoaders: 0
         }
       }]
+    }, {
+      test: /\.s(c|a)ss$/,
+      use: [
+        {
+          loader: MiniCssExtractPlugin.loader,
+          options: {
+            publicPath: '../'
+          }
+        }, {
+          loader: require.resolve('css-loader'),
+          options: {
+            importLoaders: 0
+          }
+        },
+        {
+          loader: require.resolve('sass-loader'), // Requires sass-loader@^7.0.0
+          options: {
+            implementation: require('sass'), // Requires >= sass-loader@^8.0.0
+            sassOptions: {
+              indentedSyntax: true // optional
+            }
+          }
+        }
+      ]
     }]
   },
   plugins: [

@@ -1,11 +1,8 @@
-.container-fluid.px-0
-  nav.navbar.navbar-dark.bg-dark
-    .navbar-brand.d-flex
-      div JSON to table
-  .container-fluid.px-0.d-flex.flex-wrap
-    b-card(no-body).w-100
-      b-card-body
-        textarea.w-100(v-model='text' @input="translate" style="min-height: calc(30vh)")
-    b-card(no-body style="min-height: calc(60vh)").w-100
-      b-card-body.overflow-auto
-        json-table(v-model="value")
+v-app
+  v-app-bar(app)
+    v-toolbar-title json2table
+  v-main
+    v-container(fluid outlined height="30vh")
+      v-textarea(outlined label="json" v-model='text' @input="translate")
+    v-container(fluid outlined height="60vh").overflow-auto
+      json-table(v-model="value")

@@ -3,6 +3,20 @@ v-app
     v-toolbar-title json2table
   v-main
     v-container(fluid outlined height="30vh")
-      v-textarea(outlined label="json" v-model='text' @input="translate")
-    v-container(fluid outlined height="60vh").overflow-auto
-      json-table(v-model="value")
+      v-textarea(outlined label="json" v-model='text' @input="translate" hide-details)
+      v-row
+        v-col(cols="auto")
+          v-switch(v-model="outJSON" label="output json") 
+        v-col(cols="auto").d-flex.align-center
+            div
+              a(href="https://jsonpath.com/" target="_blank") See: JSONPath - https://jsonpath.com/
+      v-text-field(outlined dense label="JSONpath" v-model='jsonpath' @input="translate" hide-details)
+    v-container(fluid dense outlined height="60vh").overflow-auto
+      template(v-if="outJSON")
+        json-path(v-if="value&&jsonpath" v-model="value" :path='jsonpath' v-slot="data" @error="onError")
+          pre {{JSON.stringify(data.item,null,2)}}
+        pre(v-else) {{JSON.stringify(value,null,2)}}
+      template(v-else)
+        json-path(v-if="value&&jsonpath" v-model="value" :path='jsonpath' v-slot="data" @error="onError")
+          json-table(v-model="data.item")
+        json-table(v-else v-model="value")

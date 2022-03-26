@@ -1,9 +1,8 @@
-import { render, staticRenderFns } from './render.pug'
+import * as render from './render.pug'
 const ScalarType = Symbol('ScalarType')
 const ObjectType = Symbol('ObjectType')
 export default {
-  render,
-  staticRenderFns,
+  ...render,
   name: 'json-table',
   props: ['value'],
   data () {

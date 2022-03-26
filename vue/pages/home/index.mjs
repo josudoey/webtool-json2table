@@ -1,22 +1,29 @@
 import JSON5 from 'json5'
 import { render, staticRenderFns } from './render.pug'
 import { pick } from 'lodash'
+import { show as toastShow } from './toast/index.mjs'
 import JsonTable from './json-table/index.mjs'
+import JsonPath from './json-path/index.mjs'
 const persistKey = 'state'
-const persistProps = ['text']
+const persistProps = ['text', 'jsonpath', 'outJSON']
+
 export default {
   render,
   staticRenderFns,
   components: {
-    JsonTable
+    JsonTable,
+    JsonPath
   },
   data () {
     return {
-      text: '{hello: \'world\'}',
+      jsonpath: '',
+      outJSON: false,
+      text: '{"store":{"book":[{"category":"reference","author":"Nigel Rees","title":"Sayings of the Century","price":8.95},{"category":"fiction","author":"Evelyn Waugh","title":"Sword of Honour","price":12.99},{"category":"fiction","author":"Herman Melville","title":"Moby Dick","isbn":"0-553-21311-3","price":8.99},{"category":"fiction","author":"J. R. R. Tolkien","title":"The Lord of the Rings","isbn":"0-395-19395-8","price":22.99}],"bicycle":{"color":"red","price":19.95}}}',
       value: ''
     }
   },
   mounted () {
+    window.show = toastShow.bind(this, this)
     this.load()
     this.translate()
   },
@@ -42,6 +49,12 @@ export default {
         .replaceAll(/ObjectId\(("[0-9a-f]{24}")\)/g, '$1')
         .replaceAll(/ISODate\(("\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z")\)/g, '$1')
     },
+    onError (err) {
+      toastShow(this, {
+        text: err.message,
+        timeout: 2000
+      })
+    },
     translate () {
       try {
         const t = this.getMongoJSONText(this.text)
@@ -49,11 +62,7 @@ export default {
         this.save()
       } catch (err) {
         this.value = ''
-        this.$bvToast.toast(err.message, {
-          title: 'Parse Error',
-          autoHideDelay: 1000,
-          appendToast: true
-        })
+        this.onError(err)
       }
     }
   }
